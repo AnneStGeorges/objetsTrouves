@@ -6,10 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ListActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.anne.ExoAppli.adapter.RVPostAdapter;
 import com.anne.ExoAppli.model.Post;
@@ -34,15 +33,24 @@ private RecyclerView recyclerView;
 
         //get data
         List<Post> postList = postService.getAllPosts();
+
         //get recyclerview
         recyclerView = findViewById(R.id.rv_post_list);
-        //create and use adapter (class)
-        RVPostAdapter rvPostAdapter = new RVPostAdapter(this, R.layout.post_list_item);
-        recyclerView.setAdapter(rvPostAdapter);
+
         //configure adapter and layout manager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+        RVPostAdapter.OnItemClickListener clickListener = new RVPostAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(Post postClicked) {
+                Toast.makeText(ViewListActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        //create and use adapter (class)
+        RVPostAdapter rvPostAdapter = new RVPostAdapter(postList, clickListener);
+        recyclerView.setAdapter(rvPostAdapter);
     }
 
     //method to go back to previous page

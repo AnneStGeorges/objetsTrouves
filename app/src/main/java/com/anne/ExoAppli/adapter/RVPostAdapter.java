@@ -14,14 +14,13 @@ import com.anne.ExoAppli.R;
 import com.anne.ExoAppli.model.Post;
 import com.anne.ExoAppli.service.PostService;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder> {
 
-
-    private final int recyclerItemRes;
-    private final Context context;
     private List<Post> data;
+    private WeakReference<OnItemClickListener> listener;
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,10 +33,9 @@ public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder
         }
 
     }
-    public RVPostAdapter(Context context, @LayoutRes int recyclerItemRes) {
-        this.recyclerItemRes = recyclerItemRes;
-        this.data = PostService.getInstance().getAllPosts();
-        this.context = context;
+    public RVPostAdapter(List<Post> postList, OnItemClickListener listener) {
+        this.data = postList;
+        this.listener = new WeakReference<>(listener);
     }
 
     @NonNull
@@ -52,10 +50,28 @@ public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder
         Post post = data.get(position);
         holder.tvName.setText(post.getName());
         holder.tvDescription.setText(post.getDescription());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+
+                if(listener.get() != null){
+                    listener.get().onClick(post);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return data.size();
     }
+
+    public interface OnItemClickListener{
+        void onClick(Post postClicked);
+
+    }
 }
+
+

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExoAppli">
         <activity
+            android:name=".DetailsPostActivity"
+            android:exported="true" />
+        <activity
             android:name=".ViewListActivity"
             android:exported="true" />
         <activity
