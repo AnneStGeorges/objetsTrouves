@@ -1,10 +1,13 @@
 package com.anne.ExoAppli.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.util.Date;
 
-public class Post {
+public class Post implements Parcelable {
     private String name;
     private String description;
     private String address;
@@ -115,4 +118,62 @@ public class Post {
                 ", createdDate=" + createdDate +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.description);
+        dest.writeString(this.address);
+        dest.writeInt(this.civility == null ? -1 : this.civility.ordinal());
+        dest.writeString(this.firstname);
+        dest.writeString(this.lastname);
+        dest.writeString(this.email);
+        dest.writeString(this.phoneNumber);
+        dest.writeLong(this.createdDate != null ? this.createdDate.getTime() : -1);
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.name = source.readString();
+        this.description = source.readString();
+        this.address = source.readString();
+        int tmpCivility = source.readInt();
+        this.civility = tmpCivility == -1 ? null : CivilityEnum.values()[tmpCivility];
+        this.firstname = source.readString();
+        this.lastname = source.readString();
+        this.email = source.readString();
+        this.phoneNumber = source.readString();
+        long tmpCreatedDate = source.readLong();
+        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
+    }
+
+    protected Post(Parcel in) {
+        this.name = in.readString();
+        this.description = in.readString();
+        this.address = in.readString();
+        int tmpCivility = in.readInt();
+        this.civility = tmpCivility == -1 ? null : CivilityEnum.values()[tmpCivility];
+        this.firstname = in.readString();
+        this.lastname = in.readString();
+        this.email = in.readString();
+        this.phoneNumber = in.readString();
+        long tmpCreatedDate = in.readLong();
+        this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 }

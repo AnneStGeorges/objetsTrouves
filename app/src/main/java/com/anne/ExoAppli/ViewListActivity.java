@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.anne.ExoAppli.adapter.RVPostAdapter;
 import com.anne.ExoAppli.model.Post;
@@ -21,6 +21,9 @@ public class ViewListActivity extends AppCompatActivity {
 private PostService postService = PostService.getInstance();
 
 private RecyclerView recyclerView;
+
+public static final String KEY_BUNDLE_POST = "KEY_BUNDLE_POST";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,14 @@ private RecyclerView recyclerView;
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         RVPostAdapter.OnItemClickListener clickListener = new RVPostAdapter.OnItemClickListener() {
+
+
             @Override
             public void onClick(Post postClicked) {
-                Toast.makeText(ViewListActivity.this, "clicked", Toast.LENGTH_SHORT).show();
+               Intent intent = new Intent(ViewListActivity.this, DetailsPostActivity.class);
+               intent.putExtra(KEY_BUNDLE_POST, postClicked);
+               startActivity(intent);
+
             }
         };
 
