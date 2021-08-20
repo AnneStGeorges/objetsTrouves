@@ -2,6 +2,7 @@ package com.anne.ExoAppli;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -23,11 +25,16 @@ import android.widget.RadioGroup;
 
 import com.anne.ExoAppli.model.CivilityEnum;
 import com.anne.ExoAppli.model.Post;
+import com.anne.ExoAppli.service.PostRetroFitService;
 import com.anne.ExoAppli.service.PostService;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CreatePostActivity extends AppCompatActivity {
@@ -40,7 +47,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private String phoneNumber;
     private CivilityEnum gender;
     private Button publishBtn ;
-    private PostService postService;
+    private PostRetroFitService postService;
     private TextInputLayout titleLayout ;
     private TextInputLayout descriptionLayout ;
     private  TextInputLayout addressLayout ;
@@ -64,7 +71,7 @@ public class CreatePostActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_create_post);
-        postService = PostService.getInstance();
+
         titleLayout = findViewById(R.id.addTitle);
         descriptionLayout = findViewById(R.id.description);
         addressLayout = findViewById(R.id.address);
@@ -95,22 +102,30 @@ public class CreatePostActivity extends AppCompatActivity {
                             break;
                     }
                 }));
-                Post post = new Post(title, description, address, gender, name, firstname, email, phoneNumber, selectedBitmap);
-                postService.createPost(post);
+                Post post = new Post(title, description, address, gender, firstname, name, email, phoneNumber);
+                post.setPictureBase64(selectedBitmap);
+                postService = RetrofitApi.getInstance();
+                Call<Post> createPostCall = postService.createPost(post);
+                createPostCall.enqueue(new Callback<Post>() {
+                    @Override
+                    public void onResponse(Call<Post> call, Response<Post> response) {
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.post_created_successfully, Snackbar.LENGTH_SHORT);
+                        snackbar.addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+                                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                    finish();
+                                }
+                            }
+                        });
+                        snackbar.show();
+                    }
 
-
-        //snackbar (success message)
-        Snackbar snackbar = Snackbar.make(view, R.string.post_created_successfully, Snackbar.LENGTH_SHORT);
-        snackbar.addCallback(new Snackbar.Callback(){
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event){
-                if (event ==Snackbar.Callback.DISMISS_EVENT_TIMEOUT){
-                    finish();
-                }
-            }
-        });
-        snackbar.show();
-
+                    @Override
+                    public void onFailure(Call<Post> call, Throwable t) {
+                        Snackbar.make(findViewById(android.R.id.content), "Une erreur est survenue", Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     };
 });
     }

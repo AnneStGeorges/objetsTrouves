@@ -1,10 +1,14 @@
 package com.anne.ExoAppli.model;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
+import com.anne.ExoAppli.util.ImageUtil;
 
 import java.util.Date;
 
@@ -18,7 +22,7 @@ public class Post implements Parcelable {
     private String email;
     private String phoneNumber;
     private Date createdDate;
-    private Bitmap picture;
+    private String pictureBase64;
 
     public Post(String name, String description, String address, CivilityEnum civility, String firstname, String lastname, String email, String phoneNumber) {
         this.name = name;
@@ -32,17 +36,12 @@ public class Post implements Parcelable {
         this.createdDate = new Date();
     }
 
-    public Post(String name, String description, String address, CivilityEnum civility, String firstname, String lastname, String email, String phoneNumber, Bitmap picture) {
-        this.name = name;
-        this.description = description;
-        this.address = address;
-        this.civility = civility;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.createdDate = new Date();
-        this.picture = picture;
+    public Bitmap getPictureBase64() {
+        return pictureBase64 != null ? ImageUtil.convert(pictureBase64) : null;
+    }
+
+    public void setPictureBase64(Bitmap pictureBmp) {
+        this.pictureBase64 = ImageUtil.convert(pictureBmp);
     }
 
     public String getName() {
@@ -51,10 +50,6 @@ public class Post implements Parcelable {
 
     public String getDescription() {
         return description;
-    }
-
-    public Bitmap getPicture() {
-        return picture;
     }
 
     public void setName(String name) {
@@ -154,7 +149,7 @@ public class Post implements Parcelable {
         dest.writeString(this.email);
         dest.writeString(this.phoneNumber);
         dest.writeLong(this.createdDate != null ? this.createdDate.getTime() : -1);
-        dest.writeParcelable(this.picture, flags);
+        dest.writeString(this.pictureBase64);
     }
 
     public void readFromParcel(Parcel source) {
@@ -169,7 +164,7 @@ public class Post implements Parcelable {
         this.phoneNumber = source.readString();
         long tmpCreatedDate = source.readLong();
         this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
-        this.picture = source.readParcelable(Bitmap.class.getClassLoader());
+        this.pictureBase64 = source.readString();
     }
 
     protected Post(Parcel in) {
@@ -184,7 +179,7 @@ public class Post implements Parcelable {
         this.phoneNumber = in.readString();
         long tmpCreatedDate = in.readLong();
         this.createdDate = tmpCreatedDate == -1 ? null : new Date(tmpCreatedDate);
-        this.picture = in.readParcelable(Bitmap.class.getClassLoader());
+        this.pictureBase64 = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {

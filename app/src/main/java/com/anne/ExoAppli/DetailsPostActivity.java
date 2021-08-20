@@ -44,7 +44,7 @@ private Post post;
             tvName.setText(post.getName());
             tvDescription.setText(post.getDescription());
             tvAddress.setText(post.getAddress());
-            tvImage.setImageBitmap(post.getPicture());
+            tvImage.setImageBitmap(post.getPictureBase64());
         }
     }
 
