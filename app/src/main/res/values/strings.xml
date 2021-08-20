@@ -4,4 +4,13 @@
     <string name="civility_mrs">Madame</string>
     <string name="post_created_successfully">Votre annonce a bien été postée</string>
     <string name="share_with">share</string>
+    <string name="picker_picture_title">Choisir une image</string>
+    <string name="picker_picture_choice_take_picture">Prendre une photo</string>
+    <string name="picker_picture_choice_pick_picture_gallery">Choisir depuis la galerie</string>
+    <string name="picker_picture_choice_cancel">Annuler</string>
+    <array name="picker_picture_choices">
+        <item>@string/picker_picture_choice_take_picture</item>
+        <item>@string/picker_picture_choice_pick_picture_gallery</item>
+        <item>@string/picker_picture_choice_cancel</item>
+    </array>
 </resources>

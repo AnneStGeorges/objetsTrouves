@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/HB/AndroidStudioProjects/ExoAppli/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.16965811965811967" />
+        <entry key="..\:/Users/HB/AndroidStudioProjects/ExoAppli/app/src/main/res/layout/activity_create_post.xml" value="0.2" />
         <entry key="..\:/Users/HB/AndroidStudioProjects/ExoAppli/app/src/main/res/layout/activity_details_post.xml" value="0.1" />
+        <entry key="..\:/Users/HB/AndroidStudioProjects/ExoAppli/app/src/main/res/layout/post_list_item.xml" value="0.19572649572649573" />
         <entry key="..\:/Users/HB/AndroidStudioProjects/ExoAppli/app/src/main/res/menu/menu_details_item.xml" value="0.20854700854700856" />
       </map>
     </option>

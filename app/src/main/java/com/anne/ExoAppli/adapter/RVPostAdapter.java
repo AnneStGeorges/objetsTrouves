@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -24,12 +25,14 @@ public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
         TextView tvName;
         TextView tvDescription;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             tvName = itemView.findViewById(R.id.post_list_item_title);
             tvDescription = itemView.findViewById(R.id.post_list_item_description);
+            imageView = itemView.findViewById(R.id.imageView);
         }
 
     }
@@ -50,7 +53,7 @@ public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder
         Post post = data.get(position);
         holder.tvName.setText(post.getName());
         holder.tvDescription.setText(post.getDescription());
-
+        holder.imageView.setImageBitmap((post.getPicture()));
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
