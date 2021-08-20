@@ -53,12 +53,12 @@ public class RVPostAdapter extends RecyclerView.Adapter<RVPostAdapter.ViewHolder
         Post post = data.get(position);
         holder.tvName.setText(post.getName());
         holder.tvDescription.setText(post.getDescription());
-        holder.imageView.setImageBitmap((post.getPicture()));
+        if (post.getPicture()!= null){
+            holder.imageView.setImageBitmap((post.getPicture()));
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
-
                 if(listener.get() != null){
                     listener.get().onClick(post);
                 }

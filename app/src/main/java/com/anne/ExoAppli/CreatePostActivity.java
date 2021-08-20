@@ -75,6 +75,7 @@ public class CreatePostActivity extends AppCompatActivity {
         genderRadioLayout = findViewById(R.id.genderRadio);
         addPicture = findViewById(R.id.addPicture);
         picture = findViewById(R.id.adImage);
+        publishBtn = findViewById(R.id.publish);
         addPicture.setOnClickListener(view -> selectPicture(CreatePostActivity.this));
         publishBtn.setOnClickListener(new View.OnClickListener(){
             @Override

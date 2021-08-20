@@ -12,13 +12,17 @@ import android.view.MenuItem;
 
 import com.anne.ExoAppli.adapter.RVPostAdapter;
 import com.anne.ExoAppli.model.Post;
+import com.anne.ExoAppli.service.PostRetroFitService;
 import com.anne.ExoAppli.service.PostService;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class ViewListActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-private PostService postService = PostService.getInstance();
+public class ViewListActivity extends AppCompatActivity {
 
 private RecyclerView recyclerView;
 
@@ -34,8 +38,6 @@ public static final String KEY_BUNDLE_POST = "KEY_BUNDLE_POST";
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //get data
-        List<Post> postList = postService.getAllPosts();
 
         //get recyclerview
         recyclerView = findViewById(R.id.rv_post_list);
@@ -44,9 +46,8 @@ public static final String KEY_BUNDLE_POST = "KEY_BUNDLE_POST";
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+
         RVPostAdapter.OnItemClickListener clickListener = new RVPostAdapter.OnItemClickListener() {
-
-
             @Override
             public void onClick(Post postClicked) {
                Intent intent = new Intent(ViewListActivity.this, DetailsPostActivity.class);
@@ -55,10 +56,25 @@ public static final String KEY_BUNDLE_POST = "KEY_BUNDLE_POST";
 
             }
         };
+        //get data
 
-        //create and use adapter (class)
-        RVPostAdapter rvPostAdapter = new RVPostAdapter(postList, clickListener);
-        recyclerView.setAdapter(rvPostAdapter);
+        PostRetroFitService postService = RetrofitApi.getInstance();
+        Call<List<Post>> call = postService.fetchAllPosts();
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                //create and use adapter (class)
+                List<Post> postList = response.body();
+                RVPostAdapter rvPostAdapter = new RVPostAdapter(postList, clickListener);
+                recyclerView.setAdapter(rvPostAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                Snackbar.make(getParent().getWindow().getDecorView(), "Une erreur est survenu", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     //method to go back to previous page

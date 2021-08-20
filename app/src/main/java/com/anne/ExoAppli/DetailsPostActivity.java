@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.anne.ExoAppli.model.Post;
@@ -17,8 +18,8 @@ import com.anne.ExoAppli.model.Post;
 public class DetailsPostActivity extends AppCompatActivity {
 private Post post;
 
-    public DetailsPostActivity(Post post) {
-        this.post = post;
+    public DetailsPostActivity() {
+
     }
 
     @Override
@@ -33,6 +34,7 @@ private Post post;
         TextView tvName = findViewById(R.id.activity_details_item_title);
         TextView tvDescription = findViewById(R.id.activity_details_item_description);
         TextView tvAddress = findViewById(R.id.activity_details_item_address);
+        ImageView tvImage = findViewById(R.id.image_annonce);
 
 
         // Get bundle post
@@ -42,6 +44,7 @@ private Post post;
             tvName.setText(post.getName());
             tvDescription.setText(post.getDescription());
             tvAddress.setText(post.getAddress());
+            tvImage.setImageBitmap(post.getPicture());
         }
     }
 
