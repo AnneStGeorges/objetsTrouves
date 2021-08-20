@@ -3,4 +3,5 @@
     <string name="civility_mr">Monsieur</string>
     <string name="civility_mrs">Madame</string>
     <string name="post_created_successfully">Votre annonce a bien été postée</string>
+    <string name="share_with">share</string>
 </resources>
